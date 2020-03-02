@@ -8,6 +8,7 @@
   "author": "roscaro <salazarbermejo@gmail.com>",
   "private": true,
   "scripts": {
+    "start": "quasar dev",
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0"
   },
