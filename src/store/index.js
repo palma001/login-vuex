@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import login from './module-login'
 
 // import example from './module-example'
 
@@ -13,15 +14,12 @@ Vue.use(Vuex)
  * async/await or return a Promise which resolves
  * with the Store instance.
  */
-
+console.log(login)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      // example
+      ...login
     },
-
-    // enable strict mode (adds overhead!)
-    // for dev mode only
     strict: process.env.DEV
   })
 
