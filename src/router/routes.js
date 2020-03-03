@@ -1,6 +1,10 @@
 
 const routes = [
   {
+    path: '/login',
+    component: () => import('pages/Login.vue')
+  },
+  {
     path: '/calen',
     component: () => import('layouts/MyLayout.vue'),
     children: [
