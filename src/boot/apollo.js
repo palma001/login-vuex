@@ -4,7 +4,8 @@ import VueApollo from 'vue-apollo'
 import fetch from 'node-fetch'
 import { createHttpLink } from 'apollo-link-http'
 
-const httpLink = createHttpLink({ uri: 'http://localhost:8000/graphql', fetch: fetch })
+const httpLink = createHttpLink({ uri: 'http://localhost:8000/graphql',
+  fetch: fetch })
 
 // Create the apollo client
 const apolloClient = new ApolloClient({
