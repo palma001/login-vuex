@@ -131,7 +131,7 @@
       <router-view />
     </q-page-container>
 
-    <q-dialog v-model="fixed">
+    <q-dialog v-model="GET_TOKEN">
       <q-card>
         <q-card-section>
           <div class="text-h5">Mensaje del Sistema</div>
@@ -144,7 +144,7 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn flat label="SI" color="primary" @click="session('refresh')" v-close-popup/>
+          <q-btn flat label="SI" color="primary" @click="session('refresh')"/>
           <q-btn flat label="No" color="primary" @click="session('logout')" v-close-popup/>
         </q-card-actions>
       </q-card>
@@ -153,17 +153,19 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import { ACTIONS } from '../store/module-login/name.js'
+import { mapActions, mapGetters } from 'vuex'
+import { ACTIONS, GETTERS } from '../store/module-login/name.js'
 export default {
   name: 'MyLayout',
-
   data () {
     return {
       leftDrawerOpen: false,
       link: 'calen',
       fixed: true
     }
+  },
+  computed: {
+    ...mapGetters([GETTERS.GET_TOKEN])
   },
   methods: {
     session (data) {

@@ -16,7 +16,7 @@ Vue.use(Vuex)
  */
 export const Store = new Vuex.Store({
   modules: {
-    ...login
+    login
   },
   strict: process.env.DEV
 })

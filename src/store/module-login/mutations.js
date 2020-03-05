@@ -1,5 +1,5 @@
 import { MUTATIONS } from './name'
-const mutations = {
+export const mutations = {
 
   [MUTATIONS.CLEAR_ACCOUNT_STATE]: (state, payload) => {
     state.email = null
@@ -47,8 +47,4 @@ const mutations = {
     }
     localStorage.setItem('expires_in', state.expires_in)
   }
-}
-
-export default {
-  mutations
 }

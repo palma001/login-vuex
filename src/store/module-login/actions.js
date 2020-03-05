@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
  * @param {Object} credentials user
  */
 
-const actions = {
+export const actions = {
   [ACTIONS.LOGIN]: ({ commit, dispatch }, { self }) => {
     self.$apollo.mutate({
       mutation: gql`mutation ($username: String!, $password: String!) {
@@ -41,6 +41,7 @@ const actions = {
         commit(MUTATIONS.SET_EMAIL, login.user.email)
         commit(MUTATIONS.SET_ROLES, JSON.stringify(login.user.roles))
         commit(MUTATIONS.SET_EXPIRE_IN, Number(login.expires_in))
+        dispatch(ACTIONS.AUTO_LOGOUT, Number(login.expires_in))
         self.$router.push({ path: 'calen' })
       }
     })
@@ -102,11 +103,18 @@ const actions = {
         commit(MUTATIONS.SET_TOKEN, refreshToken.access_token)
         commit(MUTATIONS.SET_REFRESH_TOKEN, refreshToken.refresh_token)
         commit(MUTATIONS.SET_EXPIRE_IN, Number(refreshToken.expires_in))
+        dispatch(ACTIONS.AUTO_LOGOUT, Number(refreshToken.expires_in))
       }
     })
+  },
+  /**
+   * Starts user time session
+   * @param {number} expireIn
+   */
+  [ACTIONS.AUTO_LOGOUT]: ({ commit }, expiresIn) => {
+    setTimeout(() => {
+      commit(MUTATIONS.SET_TOKEN, null)
+      commit(MUTATIONS.SET_EXPIRE_IN, null)
+    }, expiresIn)
   }
-}
-
-export default {
-  actions
 }
