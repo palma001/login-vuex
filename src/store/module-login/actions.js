@@ -82,8 +82,28 @@ const actions = {
    * Refresh user token
    * @param {Object} context
    */
-  [ACTIONS.REFRESH_TOKEN]: ({ commit, dispatch }) => {
-
+  [ACTIONS.REFRESH_TOKEN]: ({ commit, dispatch }, { self }) => {
+    self.$apollo.mutate({
+      mutation: gql`mutation ($refresh_token: String!) {
+      refreshToken(input: {
+        refresh_token: $refresh_token
+      })
+      {
+        access_token
+        refresh_token
+        expires_in
+        token_type
+      }
+    }`,
+      variables: {
+        refresh_token: localStorage.getItem('REFRESH_TOKEN')
+      },
+      update: (store, { data: { refreshToken } }) => {
+        commit(MUTATIONS.SET_TOKEN, refreshToken.access_token)
+        commit(MUTATIONS.SET_REFRESH_TOKEN, refreshToken.refresh_token)
+        commit(MUTATIONS.SET_EXPIRE_IN, Number(refreshToken.expires_in))
+      }
+    })
   }
 }
 

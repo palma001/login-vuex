@@ -130,6 +130,25 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-dialog v-model="fixed">
+      <q-card>
+        <q-card-section>
+          <div class="text-h5">Mensaje del Sistema</div>
+        </q-card-section>
+
+        <q-separator />
+        <q-card-section>
+          <div class="text-h6">¿Su sesión a expirado, desea continuar con la sesión?</div>
+        </q-card-section>
+        <q-separator />
+
+        <q-card-actions align="right">
+          <q-btn flat label="SI" color="primary" @click="session('refresh')" v-close-popup/>
+          <q-btn flat label="No" color="primary" @click="session('logout')" v-close-popup/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
@@ -142,10 +161,21 @@ export default {
   data () {
     return {
       leftDrawerOpen: false,
-      link: 'calen'
+      link: 'calen',
+      fixed: true
     }
   },
   methods: {
+    session (data) {
+      switch (data) {
+        case 'logout':
+          this.logout()
+          break
+        default:
+          this[ACTIONS.REFRESH_TOKEN]({ self: this })
+          break
+      }
+    },
     /**
      * Change route
      * @param  {String} data name route
@@ -160,7 +190,7 @@ export default {
     logout () {
       this[ACTIONS.LOGOUT]({ self: this })
     },
-    ...mapActions([ACTIONS.LOGOUT])
+    ...mapActions([ACTIONS.LOGOUT, ACTIONS.REFRESH_TOKEN])
   }
 }
 </script>
