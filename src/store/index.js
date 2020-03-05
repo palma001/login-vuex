@@ -14,14 +14,12 @@ Vue.use(Vuex)
  * async/await or return a Promise which resolves
  * with the Store instance.
  */
-console.log(login)
+export const Store = new Vuex.Store({
+  modules: {
+    ...login
+  },
+  strict: process.env.DEV
+})
 export default function (/* { ssrContext } */) {
-  const Store = new Vuex.Store({
-    modules: {
-      ...login
-    },
-    strict: process.env.DEV
-  })
-
   return Store
 }

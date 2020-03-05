@@ -50,7 +50,8 @@
                     label="Logout"
                     push
                     size="sm"
-                    v-close-popup />
+                    v-close-popup
+                    @click="logout"/>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -133,6 +134,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import { ACTIONS } from '../store/module-login/name.js'
 export default {
   name: 'MyLayout',
 
@@ -143,10 +146,21 @@ export default {
     }
   },
   methods: {
+    /**
+     * Change route
+     * @param  {String} data name route
+     */
     changeRoute (data) {
       this.$router.push(data)
       this.link = data
-    }
+    },
+    /**
+     * Log out api
+     */
+    logout () {
+      this[ACTIONS.LOGOUT]({ self: this })
+    },
+    ...mapActions([ACTIONS.LOGOUT])
   }
 }
 </script>

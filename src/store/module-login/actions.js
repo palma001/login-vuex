@@ -1,4 +1,4 @@
-import { ACTIONS } from './name'
+import { ACTIONS, MUTATIONS } from './name'
 import gql from 'graphql-tag'
 /**
  * Login
@@ -20,9 +20,14 @@ const actions = {
         expires_in
         token_type
         user {
-          id
-          first_name
+          email
           username
+          first_name
+          last_name
+          roles {
+            acronym
+            name
+          }
         }
       }
     }`,
@@ -31,9 +36,54 @@ const actions = {
         password: self.password
       },
       update: (store, { data: { login } }) => {
-        console.log(login)
+        commit(MUTATIONS.SET_TOKEN, login.access_token)
+        commit(MUTATIONS.SET_REFRESH_TOKEN, login.refresh_token)
+        commit(MUTATIONS.SET_EMAIL, login.user.email)
+        commit(MUTATIONS.SET_ROLES, JSON.stringify(login.user.roles))
+        commit(MUTATIONS.SET_EXPIRE_IN, Number(login.expires_in))
+        self.$router.push({ path: 'calen' })
       }
     })
+  },
+  /**
+   * Logout of the app
+   * @param {Object} context
+   */
+  [ACTIONS.LOGOUT]: ({ commit }, { self }) => {
+    commit(MUTATIONS.CLEAR_ACCOUNT_STATE)
+    self.$router.push({ name: 'login' })
+  },
+  /**
+   * Valiad session active
+   */
+  [ACTIONS.VALID_SESSION]: ({ commit, dispatch }) => {
+    let token = localStorage.getItem('TOKEN')
+    let expireIn = new Date(localStorage.getItem('expires_in'))
+    let now = new Date()
+    let email = localStorage.getItem('email')
+    let refreshToken = localStorage.getItem('REFRESH_TOKEN')
+    let invalidToken = !token || token === 'null'
+    let invalidRefreshToken = !refreshToken || refreshToken === 'null'
+    let invalidDate = !expireIn || expireIn === 'null' || now.getTime() >= expireIn.getTime()
+    let invalidUser = !email || email === 'null'
+    if (invalidToken || invalidDate || invalidUser || invalidRefreshToken) {
+      commit(MUTATIONS.CLEAR_ACCOUNT_STATE)
+      return false
+    }
+    const roles = localStorage.getItem('roles')
+    commit(MUTATIONS.SET_TOKEN, token)
+    commit(MUTATIONS.SET_REFRESH_TOKEN, refreshToken)
+    commit(MUTATIONS.SET_EMAIL, email)
+    commit(MUTATIONS.SET_ROLES, roles)
+    commit(MUTATIONS.SET_EXPIRE_IN, expireIn)
+    return true
+  },
+  /**
+   * Refresh user token
+   * @param {Object} context
+   */
+  [ACTIONS.REFRESH_TOKEN]: ({ commit, dispatch }) => {
+
   }
 }
 

@@ -1,35 +1,52 @@
-
+import { validationSession } from './validations-router'
 const routes = [
   {
     path: '/login',
+    name: 'login',
     component: () => import('pages/Login.vue')
   },
   {
     path: '/calen',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/calen.vue') }
+      {
+        path: '',
+        component: () => import('pages/calen.vue'),
+        beforeEnter: validationSession
+      }
     ]
   },
   {
     path: '/calif',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/calif.vue') }
+      {
+        path: '',
+        component: () => import('pages/calif.vue'),
+        beforeEnter: validationSession
+      }
     ]
   },
   {
     path: '/asig',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/asig.vue') }
+      {
+        path: '',
+        component: () => import('pages/asig.vue'),
+        beforeEnter: validationSession
+      }
     ]
   },
   {
     path: '/selecAsig',
     component: () => import('layouts/MyLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/selecAsig.vue') }
+      {
+        path: '',
+        component: () => import('pages/selecAsig.vue'),
+        beforeEnter: validationSession
+      }
     ]
   }
 ]
